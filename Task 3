@@ -1,0 +1,103 @@
+import java.util.Scanner;
+
+public class InventoryManagementSystem {
+    public static void main(String[] args) {
+        // Sample data initialization
+        InventoryManager inventoryManager = new InventoryManager();
+        inventoryManager.addProduct(new Product(1, "Laptop", 999.99, 10));
+        inventoryManager.addProduct(new Product(2, "Mouse", 19.99, 50));
+        inventoryManager.addProduct(new Product(3, "Keyboard", 49.99, 30));
+
+        // Sample user for authentication
+        UserManager userManager = new UserManager("admin", "password");
+
+        // Console input scanner
+        Scanner scanner = new Scanner(System.in);
+
+        // Simple console UI for interaction
+        System.out.println("Welcome to Inventory Management System");
+        System.out.print("Enter username: ");
+        String enteredUsername = scanner.nextLine();
+        System.out.print("Enter password: ");
+        String enteredPassword = scanner.nextLine();
+
+        // Authenticate user
+        if (userManager.authenticate(enteredUsername, enteredPassword)) {
+            System.out.println("Authentication successful");
+
+            // Menu options
+            int choice;
+            do {
+                System.out.println("\n1. Add Product");
+                System.out.println("2. Edit Product");
+                System.out.println("3. Delete Product");
+                System.out.println("4. Generate Low Stock Report");
+                System.out.println("5. Generate Sales Summary");
+                System.out.println("6. Exit");
+                System.out.print("Enter your choice: ");
+                choice = scanner.nextInt();
+                scanner.nextLine(); // Consume newline
+
+                switch (choice) {
+                    case 1:
+                        // Add Product
+                        System.out.print("Enter product ID: ");
+                        int id = scanner.nextInt();
+                        scanner.nextLine(); // Consume newline
+                        System.out.print("Enter product name: ");
+                        String name = scanner.nextLine();
+                        System.out.print("Enter product price: ");
+                        double price = scanner.nextDouble();
+                        System.out.print("Enter product quantity: ");
+                        int quantity = scanner.nextInt();
+                        inventoryManager.addProduct(new Product(id, name, price, quantity));
+                        System.out.println("Product added successfully");
+                        break;
+                    case 2:
+                        // Edit Product
+                        System.out.print("Enter product ID to edit: ");
+                        int editId = scanner.nextInt();
+                        scanner.nextLine(); // Consume newline
+                        System.out.print("Enter new product name: ");
+                        String newName = scanner.nextLine();
+                        System.out.print("Enter new product price: ");
+                        double newPrice = scanner.nextDouble();
+                        System.out.print("Enter new product quantity: ");
+                        int newQuantity = scanner.nextInt();
+                        inventoryManager.editProduct(editId, newName, newPrice, newQuantity);
+                        System.out.println("Product edited successfully");
+                        break;
+                    case 3:
+                        // Delete Product
+                        System.out.print("Enter product ID to delete: ");
+                        int deleteId = scanner.nextInt();
+                        scanner.nextLine(); // Consume newline
+                        inventoryManager.deleteProduct(deleteId);
+                        System.out.println("Product deleted successfully");
+                        break;
+                    case 4:
+                        // Generate Low Stock Report
+                        System.out.print("Enter threshold quantity for low stock alert: ");
+                        int threshold = scanner.nextInt();
+                        inventoryManager.generateLowStockReport(threshold);
+                        break;
+                    case 5:
+                        // Generate Sales Summary
+                        inventoryManager.generateSalesSummary();
+                        break;
+                    case 6:
+                        // Exit
+                        System.out.println("Exiting Inventory Management System");
+                        break;
+                    default:
+                        System.out.println("Invalid choice. Please enter a number between 1 and 6.");
+                }
+            } while (choice != 6);
+        } else {
+            System.out.println("Authentication failed. Exiting...");
+        }
+
+        // Close scanner
+        scanner.close();
+    }
+}
